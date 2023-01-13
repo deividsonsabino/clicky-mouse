@@ -49,7 +49,14 @@ public class Target : MonoBehaviour
 
         if (!gameObject.CompareTag("Bad"))
         {
-            gameManager.GameOver();
+            if(gameManager.lives == 0)
+            {
+                gameManager.GameOver();
+            }
+            else
+            {
+                gameManager.UpdateLives();
+            }
         }
     }
 
