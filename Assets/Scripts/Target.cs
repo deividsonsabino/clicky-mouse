@@ -11,6 +11,7 @@ public class Target : MonoBehaviour
     private float maxTorque = 10;
     private float xRange = 4;
     private float ySpawnPos = 2;
+    private AudioSource playerAudio;
 
     public ParticleSystem explosionParticle;
     public int pointValue;
@@ -20,6 +21,7 @@ public class Target : MonoBehaviour
     {
         targetTb = GetComponent<Rigidbody>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        playerAudio = gameManager.GetComponent<AudioSource>();
 
         targetTb.AddForce(RandomForce(), ForceMode.Impulse);
         targetTb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
@@ -37,6 +39,14 @@ public class Target : MonoBehaviour
     {
         if(gameManager.isGameActive)
         {
+            if(gameObject.CompareTag("Bad"))
+            {
+                playerAudio.PlayOneShot(gameManager.bombAudioClip,1.0f);
+            }
+            else
+            {
+                playerAudio.PlayOneShot(gameManager.attackAudioClip, 1.0f);
+            }
             Destroy(gameObject);
             Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
             gameManager.UpdateScore(pointValue);
@@ -52,6 +62,8 @@ public class Target : MonoBehaviour
             if(gameManager.lives == 0)
             {
                 gameManager.GameOver();
+                playerAudio.Stop();
+                playerAudio.PlayOneShot(gameManager.gameOverAudioClip, 1.0f);
             }
             else
             {
