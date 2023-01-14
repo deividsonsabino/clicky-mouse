@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioClip attackAudioClip;
+    public AudioClip bombAudioClip;
+    public AudioClip gameOverAudioClip;
     public List<GameObject> targets;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI gameOverText;
@@ -15,6 +20,7 @@ public class GameManager : MonoBehaviour
     public bool isGameActive;
     public GameObject titleScreen;
     public int lives = 3;
+    public Slider volumeSlider;
     private int score;
     private float spawnRate = 1.0f;
 
@@ -23,6 +29,18 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         livesText.text = "Lives " + lives;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.volume = volumeSlider.value;
+    }
+
+    void OnEnable()
+    {
+        volumeSlider.onValueChanged.AddListener(delegate { changeVolume(volumeSlider.value); });
+    }
+
+    void changeVolume(float sliderValue)
+    {
+        audioSource.volume = sliderValue;
     }
 
     IEnumerator SpawnTarget()
@@ -53,6 +71,7 @@ public class GameManager : MonoBehaviour
         gameOverText.gameObject.SetActive(true);
         isGameActive = false;
         restartButton.gameObject.SetActive(true);
+        audioSource.Stop();
     }
 
     public void RestartGame()
