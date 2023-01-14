@@ -35,23 +35,23 @@ public class Target : MonoBehaviour
         
     }
 
-    private void OnMouseDown()
-    {
-        if(gameManager.isGameActive)
-        {
-            if(gameObject.CompareTag("Bad"))
-            {
-                playerAudio.PlayOneShot(gameManager.bombAudioClip,1.0f);
-            }
-            else
-            {
-                playerAudio.PlayOneShot(gameManager.attackAudioClip, 1.0f);
-            }
-            Destroy(gameObject);
-            Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
-            gameManager.UpdateScore(pointValue);
-        }
-    }
+    //private void OnMouseDown()
+    //{
+    //    if(gameManager.isGameActive)
+    //    {
+    //        if(gameObject.CompareTag("Bad"))
+    //        {
+    //            playerAudio.PlayOneShot(gameManager.bombAudioClip,1.0f);
+    //        }
+    //        else
+    //        {
+    //            playerAudio.PlayOneShot(gameManager.attackAudioClip, 1.0f);
+    //        }
+    //        Destroy(gameObject);
+    //        Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+    //        gameManager.UpdateScore(pointValue);
+    //    }
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -85,5 +85,23 @@ public class Target : MonoBehaviour
     Vector3 RandomSpwanPos()
     {
         return new Vector3(Random.Range(-xRange, xRange), -ySpawnPos);
+    }
+
+    public void DestroyTarget()
+    {
+        if (gameManager.isGameActive)
+        {
+            if (gameObject.CompareTag("Bad"))
+            {
+                playerAudio.PlayOneShot(gameManager.bombAudioClip, 1.0f);
+            }
+            else
+            {
+                playerAudio.PlayOneShot(gameManager.attackAudioClip, 1.0f);
+            }
+            Destroy(gameObject);
+            Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
+            gameManager.UpdateScore(pointValue);
+        }
     }
 }
