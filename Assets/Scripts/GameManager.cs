@@ -19,10 +19,12 @@ public class GameManager : MonoBehaviour
     public Button restartButton;
     public bool isGameActive;
     public GameObject titleScreen;
+    public GameObject pauseScreen;
     public int lives = 3;
     public Slider volumeSlider;
     private int score;
     private float spawnRate = 1.0f;
+    private bool isPaused = false;
 
 
     // Start is called before the first frame update
@@ -33,9 +35,34 @@ public class GameManager : MonoBehaviour
         audioSource.volume = volumeSlider.value;
     }
 
+    private void Update()
+    {
+        PauseGame();
+    }
+
     void OnEnable()
     {
         volumeSlider.onValueChanged.AddListener(delegate { changeVolume(volumeSlider.value); });
+    }
+
+    public void PauseGame()
+    {
+        if (isGameActive && Input.GetKeyDown(KeyCode.Escape))
+        {
+            isPaused = !isPaused;
+            if (isPaused)
+            {
+                Time.timeScale = 0f;
+                pauseScreen.gameObject.SetActive(isPaused);
+                audioSource.Pause();
+            }
+            else
+            {
+                Time.timeScale = 1;
+                pauseScreen.gameObject.SetActive(isPaused);
+                audioSource.Play();
+            }
+        }
     }
 
     void changeVolume(float sliderValue)
